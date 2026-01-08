@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre Panier - MangaAddict{% endblock %}
+
+{% block body %}
+<div class="container mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold mb-8 text-slate-800 flex items-center gap-2">
+        <span>🛒</span> Votre Panier
+    </h1>
+
+    {% if items is empty %}
+        <div class="bg-white p-8 rounded-xl shadow text-center text-slate-500">
+            <p class="text-xl mb-4">Votre panier est vide.</p>
+            <a href="{{ path('app_manga_index') }}" class="text-red-600 font-bold hover:underline">Retourner au catalogue</a>
+        </div>
+    {% else %}
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-slate-100">
+            <table class="w-full text-left">
+                <thead class="bg-slate-100 text-slate-600 uppercase text-sm">
+                    <tr>
+                        <th class="p-4">Produit</th>
+                        <th class="p-4 text-center">Prix</th>
+                        <th class="p-4 text-center">Quantité</th>
+                        <th class="p-4 text-center">Total</th>
+                        <th class="p-4 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                    {% for item in items %}
+                        <tr>
+                            <td class="p-4 font-medium text-slate-800">
+                                {{ item.manga.title }}
+                                <br>
+                                <span class="text-xs text-slate-400">{{ item.manga.author }}</span>
+                            </td>
+                            <td class="p-4 text-center">{{ item.manga.price }} €</td>
+                            <td class="p-4 text-center font-bold">{{ item.quantity }}</td>
+                            <td class="p-4 text-center text-red-600 font-bold">
+                                {{ item.manga.price * item.quantity }} €
+                            </td>
+                            <td class="p-4 text-right">
+                                <a href="{{ path('app_cart_remove', {'id': item.manga.id}) }}" class="text-red-500 hover:text-red-700 bg-red-50 p-2 rounded-full transition">
+                                    🗑️
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot class="bg-slate-50 font-bold">
+                    <tr>
+                        <td colspan="3" class="p-4 text-right uppercase text-slate-500 text-sm">Total à payer :</td>
+                        <td class="p-4 text-center text-xl text-red-600">{{ total }} €</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="mt-8 flex justify-between items-center">
+            <a href="{{ path('app_manga_index') }}" class="text-slate-600 hover:text-slate-900">← Continuer vos achats</a>
+            <a href="{{ path('app_cart_validate') }}" class="bg-slate-900 text-white px-8 py-3 rounded-lg font-bold hover:bg-green-600 transition shadow-lg"> </a>
+    Valider la commande
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
